@@ -1,0 +1,56 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.cube-fields {
+	width: 368px;
+	margin: auto;
+	overflow: hidden;
+
+
+}
+
+.side {
+	width: 180px;
+	height: 180px;
+	border: 1px solid #000;
+	margin: 2px;
+	float: left;
+}
+
+
+.side .sq {
+	width: 57px;
+	height: 57px;
+	border: 1px solid;
+	margin: 1px;
+	float: left;
+	text-align: center;
+}
+
+
+.sq-red {
+	background: #ffd0d0;
+}
+
+.sq-blue {
+	background: #c2c2ff;
+}
+
+.sq-green {
+	background: #b0ffb0;
+}
+
+.sq-gray {
+	background: #eaeaea;
+}
+
+.sq-orange {
+	background: #ffb82f;
+}
+
+.sq-yellow {
+	background: #ffff4d;
+}
