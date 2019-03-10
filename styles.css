@@ -146,6 +146,27 @@
 	}
 }
 
+@keyframes ROTATE_RIGHT {
+	0% {
+		transform: rotateZ(0);
+	}
+
+	100% {
+		transform: rotateZ(90deg);
+	}
+}
+
+
+@keyframes ROTATE_LEFT {
+	0% {
+		transform: rotateZ(0);
+	}
+
+	100% {
+		transform: rotateZ(-90deg);
+	}
+}
+
 
 .sq--animate-slide-rigth {
 	animation: SLIDE_RIGHT 0.3s forwards;
@@ -161,4 +182,12 @@
 
 .sq--animate-slide-down {
 	animation: SLIDE_DOWN 0.3s forwards;
+}
+
+.sq--animate-rotate-right {
+	animation: ROTATE_RIGHT 0.3s forwards;
+}
+
+.sq--animate-rotate-left {
+	animation: ROTATE_LEFT 0.3s forwards;
 }

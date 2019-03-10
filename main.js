@@ -35,7 +35,8 @@ Field.prototype.render = function(target) {
 		that.target = target;
 		target.html('');
 		$.each(that.sides, function(s, side) {
-			target.append("<div class='side side-" + side.number + "' ></div>");
+			var el = target.append("<div class='side side-" + side.number + "' ></div>");
+			side.el = el[0].children[s];
 			$.each(side.squares, function(sq, square) {
 				var el = $('.side-' + side.number).append("<div class='sq sq-" + square.color + "'></div>");
 				square.el = el[0].children[sq];
@@ -163,7 +164,9 @@ Field.prototype.rotateSide = function(side, direction) {
 
 		let buf = jQuery.extend(true, {}, side);
 		for (var i = 0; i <= 8; i++) {
-			side.squares[step[i]] = buf.squares[i]
+			side.squares[step[i].pos] = buf.squares[i]
+			side.squares[step[i].pos].col = step[i].col;
+			side.el.classList.add('sq--animate-rotate-right');
 		}
 	}
 
@@ -184,6 +187,7 @@ Field.prototype.rotateSide = function(side, direction) {
 		for (var i = 0; i <= 8; i++) {
 			side.squares[step[i].pos] = buf.squares[i]
 			side.squares[step[i].pos].col = step[i].col;
+			side.el.classList.add('sq--animate-rotate-left');
 		}
 	}
 }
