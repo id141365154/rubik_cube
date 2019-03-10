@@ -9,7 +9,8 @@ for (var i = 0, l = 0; i <= 5; i++) {
 		var square = new Square({
 			color: i,
 			level: l,
-			col: c
+			col: c,
+			el: ""
 		});
 		c++;
 
@@ -28,15 +29,19 @@ for (var i = 0, l = 0; i <= 5; i++) {
 
 
 Field.prototype.render = function(target) {
-	console.log("render");
-	this.target = target;
-	target.html('');
-	$.each(this.sides, function(s, side) {
-		target.append("<div class='side side-" + side.number + "' ></div>");
-		$.each(side.squares, function(sq, square) {
-			$('.side-' + side.number).append("<div class='sq sq-" + square.color + "'>" + square.level + " : " + square.col + "</div>");
+	var that = this;
+	setTimeout(function() {
+
+		that.target = target;
+		target.html('');
+		$.each(that.sides, function(s, side) {
+			target.append("<div class='side side-" + side.number + "' ></div>");
+			$.each(side.squares, function(sq, square) {
+				var el = $('.side-' + side.number).append("<div class='sq sq-" + square.color + "'></div>");
+				square.el = el[0].children[sq];
+			});
 		});
-	});
+	}, 300);
 
 }
 
@@ -62,21 +67,33 @@ Field.prototype.rotateLevel = function(levelNumber, direction) {
 
 			if (s + 1 < 4) {
 				this.sides[s].squares[sqNoLev[levelNumber][0]] = this.sides[s + 1].squares[sqNoLev[levelNumber][0]];
+				this.sides[s].squares[sqNoLev[levelNumber][0]].col = 0;
+				this.sides[s].squares[sqNoLev[levelNumber][0]].el.classList.add("sq--animate-slide-rigth");
 				this.sides[s].squares[sqNoLev[levelNumber][1]] = this.sides[s + 1].squares[sqNoLev[levelNumber][1]];
+				this.sides[s].squares[sqNoLev[levelNumber][1]].col = 1;
+				this.sides[s].squares[sqNoLev[levelNumber][1]].el.classList.add("sq--animate-slide-rigth");
 				this.sides[s].squares[sqNoLev[levelNumber][2]] = this.sides[s + 1].squares[sqNoLev[levelNumber][2]];
+				this.sides[s].squares[sqNoLev[levelNumber][2]].col = 2;
+				this.sides[s].squares[sqNoLev[levelNumber][2]].el.classList.add("sq--animate-slide-rigth");
 			} else {
 				this.sides[s].squares[sqNoLev[levelNumber][0]] = buf[0];
+				this.sides[s].squares[sqNoLev[levelNumber][0]].col = 0;
+				this.sides[s].squares[sqNoLev[levelNumber][0]].el.classList.add("sq--animate-slide-rigth");
 				this.sides[s].squares[sqNoLev[levelNumber][1]] = buf[1];
+				this.sides[s].squares[sqNoLev[levelNumber][1]].col = 1;
+				this.sides[s].squares[sqNoLev[levelNumber][1]].el.classList.add("sq--animate-slide-rigth");
 				this.sides[s].squares[sqNoLev[levelNumber][2]] = buf[2];
+				this.sides[s].squares[sqNoLev[levelNumber][2]].col = 2;
+				this.sides[s].squares[sqNoLev[levelNumber][2]].el.classList.add("sq--animate-slide-rigth");
 			}
 
 		}
 
 		if (levelNumber == 1) {
-			rotateSide(this.sides[4], "right");
+			this.rotateSide(this.sides[4], "right");
 		}
 		if (levelNumber == 3) {
-			rotateSide(this.sides[5], "right");
+			this.rotateSide(this.sides[5], "right");
 		}
 	}
 
@@ -96,60 +113,31 @@ Field.prototype.rotateLevel = function(levelNumber, direction) {
 			if (s >= 1) {
 
 				this.sides[s].squares[sqNoLev[levelNumber][0]] = this.sides[s - 1].squares[sqNoLev[levelNumber][0]];
+				this.sides[s].squares[sqNoLev[levelNumber][0]].col = 0;
+				this.sides[s].squares[sqNoLev[levelNumber][0]].el.classList.add("sq--animate-slide-left");
 				this.sides[s].squares[sqNoLev[levelNumber][1]] = this.sides[s - 1].squares[sqNoLev[levelNumber][1]];
+				this.sides[s].squares[sqNoLev[levelNumber][1]].col = 1;
+				this.sides[s].squares[sqNoLev[levelNumber][1]].el.classList.add("sq--animate-slide-left");
 				this.sides[s].squares[sqNoLev[levelNumber][2]] = this.sides[s - 1].squares[sqNoLev[levelNumber][2]];
+				this.sides[s].squares[sqNoLev[levelNumber][2]].col = 2;
+				this.sides[s].squares[sqNoLev[levelNumber][2]].el.classList.add("sq--animate-slide-left");
 			} else {
 				this.sides[s].squares[sqNoLev[levelNumber][0]] = buf[0];
+				this.sides[s].squares[sqNoLev[levelNumber][0]].col = 0;
+				this.sides[s].squares[sqNoLev[levelNumber][0]].el.classList.add("sq--animate-slide-left");
 				this.sides[s].squares[sqNoLev[levelNumber][1]] = buf[1];
+				this.sides[s].squares[sqNoLev[levelNumber][1]].col = 1;
+				this.sides[s].squares[sqNoLev[levelNumber][1]].el.classList.add("sq--animate-slide-left");
 				this.sides[s].squares[sqNoLev[levelNumber][2]] = buf[2];
+				this.sides[s].squares[sqNoLev[levelNumber][2]].col = 2;
+				this.sides[s].squares[sqNoLev[levelNumber][2]].el.classList.add("sq--animate-slide-left");
 			}
 		}
 		if (levelNumber == 1) {
-			rotateSide(this.sides[4], "left");
+			this.rotateSide(this.sides[4], "left");
 		}
 		if (levelNumber == 3) {
-			rotateSide(this.sides[5], "left");
-		}
-	}
-
-
-	function rotateSide(side, direction) {
-		if (direction == "right") {
-			let step = {
-				0: 2,
-				1: 5,
-				2: 8,
-				3: 1,
-				4: 4,
-				5: 7,
-				6: 0,
-				7: 3,
-				8: 6
-			}
-
-			let buf = jQuery.extend(true, {}, side);
-			for (var i = 0; i <= 8; i++) {
-				side.squares[step[i]] = buf.squares[i]
-			}
-		}
-
-		if (direction == "left") {
-			let step = {
-				0: 6,
-				1: 3,
-				2: 0,
-				3: 7,
-				4: 4,
-				5: 1,
-				6: 8,
-				7: 5,
-				8: 2
-			}
-
-			let buf = jQuery.extend(true, {}, side);
-			for (var i = 0; i <= 8; i++) {
-				side.squares[step[i]] = buf.squares[i]
-			}
+			this.rotateSide(this.sides[5], "left");
 		}
 	}
 
@@ -159,8 +147,105 @@ Field.prototype.rotateLevel = function(levelNumber, direction) {
 
 }
 
+Field.prototype.rotateSide = function(side, direction) {
+	if (direction == "right") {
+		let step = {
+			0: { pos: 2, col: 2 },
+			1: { pos: 5, col: 2 },
+			2: { pos: 8, col: 2 },
+			3: { pos: 1, col: 1 },
+			4: { pos: 4, col: 1 },
+			5: { pos: 7, col: 1 },
+			6: { pos: 0, col: 0 },
+			7: { pos: 3, col: 0 },
+			8: { pos: 6, col: 0 }
+		}
+
+		let buf = jQuery.extend(true, {}, side);
+		for (var i = 0; i <= 8; i++) {
+			side.squares[step[i]] = buf.squares[i]
+		}
+	}
+
+	if (direction == "left") {
+		let step = {
+			0: { pos: 6, col: 0 },
+			1: { pos: 3, col: 0 },
+			2: { pos: 0, col: 0 },
+			3: { pos: 7, col: 1 },
+			4: { pos: 4, col: 1 },
+			5: { pos: 1, col: 1 },
+			6: { pos: 8, col: 2 },
+			7: { pos: 5, col: 2 },
+			8: { pos: 2, col: 2 }
+		}
+
+		let buf = jQuery.extend(true, {}, side);
+		for (var i = 0; i <= 8; i++) {
+			side.squares[step[i].pos] = buf.squares[i]
+			side.squares[step[i].pos].col = step[i].col;
+		}
+	}
+}
+
 
 Field.prototype.rotateCol = function(colNumber, direction) {
+	let moveColFromsideToSide = (col, sides) => {
+		let buf = sides[0].squares.filter((v, k) => {
+			if (v.col === col) {
+				return true;
+			}
+		});
+
+		for (let i = 0; i <= sides.length - 1; i++) {
+			for (let s = sides[i].squares.length - 1; s >= 0; s--) {
+				if (sides[i].squares[s].col === col) {
+					if (typeof sides[i + 1] === "object") {
+						sides[i].squares[s] = sides[i + 1].squares[s];
+
+						if (direction == "down") {
+							sides[i].squares[s].el.classList.add("sq--animate-slide-down");
+						}
+						if (direction == "up") {
+							sides[i].squares[s].el.classList.add("sq--animate-slide-up");
+						}
+					}
+				}
+			}
+		}
+
+		let bufIter = 0;
+		for (let j = 0; j <= sides[sides.length - 1].squares.length - 1; j++) {
+			if (sides[sides.length - 1].squares[j].col === col) {
+				sides[sides.length - 1].squares[j] = buf[bufIter];
+				bufIter++;
+			}
+		}
+	}
+
+
+	if (direction == "up") {
+		moveColFromsideToSide(colNumber, [this.sides[0], this.sides[5], this.sides[2], this.sides[4]]);
+		if (colNumber == 0) {
+			this.rotateSide(this.sides[3], "left");
+		}
+
+		if (colNumber == 2) {
+			this.rotateSide(this.sides[1], "right");
+		}
+	}
+
+	if (direction == "down") {
+		moveColFromsideToSide(colNumber, [this.sides[4], this.sides[2], this.sides[5], this.sides[0]]);
+		if (colNumber == 0) {
+			this.rotateSide(this.sides[3], "right");
+		}
+
+		if (colNumber == 2) {
+			this.rotateSide(this.sides[1], "left");
+		}
+	}
+
 
 
 	this.render(this.target);
@@ -169,8 +254,7 @@ Field.prototype.rotateCol = function(colNumber, direction) {
 
 field.render($('.cube-fields'));
 
-field.rotateCol(1, "up");
-
+//field.rotateCol(1, "up");
 
 
 function Field(opt) {
